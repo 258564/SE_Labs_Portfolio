@@ -1,23 +1,31 @@
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BowlingTest {
+
+    private Game g;
+
+    @BeforeEach
+    public void setUp() {
+        g = new Game();
+    }
+
+    private void rollMany(int times, int pins) {
+        for (int i = 0; i < times; i++) {
+            g.roll(pins);
+        }
+    }
+
     @Test
     public void testGutterGame() {
-        Game g = new Game();
-        for (int i = 0; i < 20; i++){
-            g.roll(0);
-        }
+        rollMany(20, 0);
         assertEquals(0, g.score());
     }
 
     @Test
     public void testForAllOnes() {
-        Game g = new Game();
-        for (int i = 0; i < 20; i++){
-            g.roll(1);
-        }
+        rollMany(20, 1);
         assertEquals(20, g.score());
     }
 }
