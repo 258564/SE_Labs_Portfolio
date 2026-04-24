@@ -28,4 +28,13 @@ public class BowlingTest {
         rollMany(20, 1);
         assertEquals(20, g.score());
     }
+
+    @Test
+    public void testForSpare() {
+        g.roll(4);
+        g.roll(6);
+        g.roll(3);
+        rollMany(17, 0);
+        assertEquals(16, g.score());
+    }
 }
