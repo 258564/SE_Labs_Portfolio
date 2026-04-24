@@ -1,6 +1,8 @@
 public class Game {
+    private static final int ALL_PINS = 10;
     private int[] pins = new int[21];
     private int rollCount = 0;
+
     public void roll (int knocked) {
         pins[rollCount++] = knocked;
     }
@@ -8,19 +10,31 @@ public class Game {
     public int score() {
         int total = 0;
         int ball = 0;
-        int frame = 0;
 
-        while (frame < 10) {
-            boolean spare = (pins[ball] + pins[ball + 1] == 10);
-            if (spare) {
-                total += 10 + pins[ball + 2];
-                ball += 2;
+        for (int frame = 0; frame < ALL_PINS; frame++) {
+            if (firstRollKnockedAllPins(ball)) {
+                total += ALL_PINS + strikeBonus(ball);
+                ball  += 1;
+            } else if (twoRollsKnockedAllPins(ball)) {
+                total += ALL_PINS + pins[ball + 2];
+                ball  += 2;
             } else {
                 total += pins[ball] + pins[ball + 1];
-                ball += 2;
+                ball  += 2;
             }
-            frame++;
         }
         return total;
+    }
+
+    private boolean firstRollKnockedAllPins(int ball) {
+        return pins[ball] == ALL_PINS;
+    }
+
+    private boolean twoRollsKnockedAllPins(int ball) {
+        return pins[ball] + pins[ball + 1] == ALL_PINS;
+    }
+
+    private int strikeBonus(int ball) {
+        return pins[ball + 1] + pins[ball + 2];
     }
 }

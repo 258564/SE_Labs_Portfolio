@@ -40,11 +40,10 @@ public class BowlingTest {
 
     @Test
     public void testForStrike() {
-        g.roll(4);
-        g.roll(6);
+        g.roll(10);
         g.roll(4);
         g.roll(5);
-        rollMany(16, 0);
+        rollMany(17, 0);
         assertEquals(28, g.score());
     }
 }
