@@ -46,4 +46,10 @@ public class BowlingTest {
         rollMany(17, 0);
         assertEquals(28, g.score());
     }
+
+    @Test
+    void rollPerfect() {
+        rollMany(12, 10);
+        assertEquals(300, g.score());
+    }
 }
