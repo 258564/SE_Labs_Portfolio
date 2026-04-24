@@ -12,6 +12,7 @@ public class BowlingTest {
         assertEquals(0, g.score());
     }
 
+    @Test
     public void testForAllOnes() {
         Game g = new Game();
         for (int i = 0; i < 20; i++){
