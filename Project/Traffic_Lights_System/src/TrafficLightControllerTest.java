@@ -72,27 +72,31 @@ public class TrafficLightControllerTest {
     }
 
     @Test
-    public void testEwGoesGreenWhenNsBecomesRed() {
+    public void testEwGoesYellowWhenNsBecomesRed() {
         advanceTimes(2);
-        assertEquals(TrafficLightController.LightState.GREEN, controller.getEwState());
+        assertEquals(TrafficLightController.LightState.YELLOW, controller.getEwState());
     }
 
     @Test
     public void testNsArrowOnWhenEwIsGreen() {
-        advanceTimes(2);
+        advanceTimes(3);
         assertEquals(TrafficLightController.ArrowState.NS_ON, controller.getArrowState());
     }
 
     // EwGreen to EwYellow
-
-
+    @Test
+    public void testEwGreenAdvancesToEwYellow() {
+        advanceTimes(4);
+        assertEquals(TrafficLightController.LightState.YELLOW, controller.getEwState());
+    }
 
     // EwYellow to EwRed && NsGreen
-
-
-
-
-
+    @Test
+    public void testEwYellowAdvancesToEwRed() {
+        advanceTimes(5);
+        assertEquals(TrafficLightController.LightState.RED, controller.getEwState());
+        assertEquals(TrafficLightController.LightState.YELLOW, controller.getNsState());
+    }
 
     @Test
     public void testNsAndEwAreNeverBothGreen() {

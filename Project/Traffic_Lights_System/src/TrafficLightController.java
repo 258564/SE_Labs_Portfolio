@@ -35,24 +35,30 @@ public class TrafficLightController {
     }
 
     public void advanceState() {
-        if (nsState == LightState.GREEN) {
+        boolean prev_ns_green = true;
+        boolean prev_ew_on = false;
+        if (nsState == LightState.GREEN && ewState == LightState.RED) {
             nsState    = LightState.YELLOW;
             arrowState = ArrowState.BOTH_OFF;
-
-        } else if (nsState == LightState.YELLOW) {
+        } else if (nsState == LightState.YELLOW && ewState == LightState.RED && prev_ns_green == true) {
             nsState    = LightState.RED;
-            ewState    = LightState.GREEN;
-            arrowState = ArrowState.NS_ON;
-
-        } else if (nsState == LightState.RED && ewState == LightState.GREEN) {
             ewState    = LightState.YELLOW;
+            prev_ns_green = false;
+        } else if (nsState == LightState.RED && ewState == LightState.YELLOW && prev_ew_on == false) {
+            ewState = LightState.GREEN;
+            arrowState = ArrowState.NS_ON;
+            prev_ew_on = true;
+        } else if (nsState == LightState.RED && ewState == LightState.GREEN) {
+            ewState = LightState.YELLOW;
             arrowState = ArrowState.BOTH_OFF;
-
-        } else if (nsState == LightState.RED
-                && ewState == LightState.YELLOW) {
-            nsState    = LightState.GREEN;
+        } else if (nsState == LightState.RED && ewState == LightState.YELLOW && prev_ew_on == true) {
             ewState    = LightState.RED;
+            nsState    = LightState.YELLOW;
+            prev_ew_on = false;
+        } else if (nsState == LightState.YELLOW && ewState == LightState.RED && prev_ns_green == false) {
+            nsState    = LightState.GREEN;
             arrowState = ArrowState.EW_ON;
+            prev_ns_green = true;
         }
     }
 
