@@ -72,4 +72,26 @@ public class TrafficLightControllerTest {
         assertEquals(TrafficLightController.Arrow_State.BOTH_OFF, controller.getArrowState());
     }
 
+    // CrossWalks
+
+    @Test
+    public void testCrosswalkAtInitialNsGreenState() {
+        assertEquals(TrafficLightController.CrosswalkState.WALK, controller.getNsCrosswalk());
+        assertEquals(TrafficLightController.CrosswalkState.DONT_WALK, controller.getEwCrosswalk());
+    }
+
+    @Test
+    public void testCrosswalkDuringNsYellow() {
+        controller.advanceState();
+        assertEquals(TrafficLightController.CrosswalkState.DONT_WALK, controller.getNsCrosswalk());
+        assertEquals(TrafficLightController.CrosswalkState.DONT_WALK, controller.getEwCrosswalk());
+    }
+
+    @Test
+    public void testBothCrosswalksAreNeverWalkSimultaneously() {
+        for (int i = 0; i < 8; i++) {
+            assertFalse("Both crosswalks are walk at step " + i, controller.areBothCrosswalksWalkSimultaneously());
+            controller.advanceState();
+        }
+    }
 }
