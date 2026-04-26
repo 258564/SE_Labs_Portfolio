@@ -15,4 +15,10 @@ public class TrafficLightControllerTest {
     public void testInitialStateIsNorthSouthGreen() {
         assertEquals(TrafficLightController.State.NS_GREEN, controller.getState());
     }
+
+    @Test
+    public void test() {
+        controller.advanceState();
+        assertEquals(TrafficLightController.State.NS_YELLOW, controller.getState());
+    }
 }
