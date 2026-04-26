@@ -16,9 +16,12 @@ public class TrafficLightController {
     private LightState ewState;
     private ArrowState arrowState;
 
+    private boolean prev_ns_green = true;
+    private boolean prev_ew_on = false;
+
     public TrafficLightController() {
-        this.nsState    = LightState.GREEN;
-        this.ewState    = LightState.RED;
+        this.nsState = LightState.GREEN;
+        this.ewState = LightState.RED;
         this.arrowState = ArrowState.EW_ON;
     }
 
@@ -35,14 +38,12 @@ public class TrafficLightController {
     }
 
     public void advanceState() {
-        boolean prev_ns_green = true;
-        boolean prev_ew_on = false;
         if (nsState == LightState.GREEN && ewState == LightState.RED) {
-            nsState    = LightState.YELLOW;
+            nsState = LightState.YELLOW;
             arrowState = ArrowState.BOTH_OFF;
         } else if (nsState == LightState.YELLOW && ewState == LightState.RED && prev_ns_green == true) {
-            nsState    = LightState.RED;
-            ewState    = LightState.YELLOW;
+            nsState = LightState.RED;
+            ewState = LightState.YELLOW;
             prev_ns_green = false;
         } else if (nsState == LightState.RED && ewState == LightState.YELLOW && prev_ew_on == false) {
             ewState = LightState.GREEN;
@@ -52,11 +53,11 @@ public class TrafficLightController {
             ewState = LightState.YELLOW;
             arrowState = ArrowState.BOTH_OFF;
         } else if (nsState == LightState.RED && ewState == LightState.YELLOW && prev_ew_on == true) {
-            ewState    = LightState.RED;
-            nsState    = LightState.YELLOW;
+            ewState = LightState.RED;
+            nsState = LightState.YELLOW;
             prev_ew_on = false;
         } else if (nsState == LightState.YELLOW && ewState == LightState.RED && prev_ns_green == false) {
-            nsState    = LightState.GREEN;
+            nsState = LightState.GREEN;
             arrowState = ArrowState.EW_ON;
             prev_ns_green = true;
         }

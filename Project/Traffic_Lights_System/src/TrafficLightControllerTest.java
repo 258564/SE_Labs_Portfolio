@@ -33,28 +33,19 @@ public class TrafficLightControllerTest {
     @Test
     public void testNsGreenAdvancesToNsYellow() {
         controller.advanceState();
-        assertEquals(
-                TrafficLightController.LightState.YELLOW,
-                controller.getNsState()
-        );
+        assertEquals(TrafficLightController.LightState.YELLOW, controller.getNsState());
     }
 
     @Test
     public void testEwStaysRedWhenNsIsYellow() {
         controller.advanceState();
-        assertEquals(
-                TrafficLightController.LightState.RED,
-                controller.getEwState()
-        );
+        assertEquals(TrafficLightController.LightState.RED, controller.getEwState());
     }
 
     @Test
     public void testArrowIsOffWhenNsIsYellow() {
         controller.advanceState();
-        assertEquals(
-                TrafficLightController.ArrowState.BOTH_OFF,
-                controller.getArrowState()
-        );
+        assertEquals(TrafficLightController.ArrowState.BOTH_OFF, controller.getArrowState());
     }
 
     private void advanceTimes(int n) {
@@ -83,12 +74,26 @@ public class TrafficLightControllerTest {
         assertEquals(TrafficLightController.ArrowState.NS_ON, controller.getArrowState());
     }
 
+
     // EwGreen to EwYellow
     @Test
     public void testEwGreenAdvancesToEwYellow() {
         advanceTimes(4);
         assertEquals(TrafficLightController.LightState.YELLOW, controller.getEwState());
     }
+
+    @Test
+    public void testNsStaysRedWhenEwIsYellow() {
+        advanceTimes(4);
+        assertEquals(TrafficLightController.LightState.RED, controller.getNsState());
+    }
+
+    @Test
+    public void testArrowIsOffWhenEwIsYellow() {
+        advanceTimes(4);
+        assertEquals(TrafficLightController.ArrowState.BOTH_OFF, controller.getArrowState());
+    }
+
 
     // EwYellow to EwRed && NsGreen
     @Test
@@ -97,6 +102,19 @@ public class TrafficLightControllerTest {
         assertEquals(TrafficLightController.LightState.RED, controller.getEwState());
         assertEquals(TrafficLightController.LightState.YELLOW, controller.getNsState());
     }
+
+    @Test
+    public void testNsGoesYellowWhenEwBecomesRed() {
+        advanceTimes(5);
+        assertEquals(TrafficLightController.LightState.YELLOW, controller.getNsState());
+    }
+
+    @Test
+    public void testArrowStaysOffWhenNsIsYellowAgain() {
+        advanceTimes(5);
+        assertEquals(TrafficLightController.ArrowState.BOTH_OFF, controller.getArrowState());
+    }
+
 
     @Test
     public void testNsAndEwAreNeverBothGreen() {
