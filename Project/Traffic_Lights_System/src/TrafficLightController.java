@@ -5,6 +5,11 @@ public class TrafficLightController {
         EW_GREEN,
         EW_YELLOW
     }
+    public enum Arrow_State {
+        NS_ON,
+        EW_ON,
+        BOTH_OFF
+    }
 
     private State current_state;
 
@@ -46,5 +51,17 @@ public class TrafficLightController {
 
     public boolean areBothAxesGreenSimultaneously() {
         return isNorthSouthGreen() && isEastWestGreen();
+    }
+
+
+    public Arrow_State getArrowState() {
+        switch (current_state) {
+            case NS_GREEN:
+                return Arrow_State.EW_ON;
+            case EW_GREEN:
+                return Arrow_State.NS_ON;
+            default:
+                return Arrow_State.BOTH_OFF;
+        }
     }
 }
