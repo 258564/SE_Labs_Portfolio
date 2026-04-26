@@ -17,8 +17,20 @@ public class TrafficLightControllerTest {
     }
 
     @Test
-    public void test() {
+    public void testNsGreenAdvancesToNsYellow() {
         controller.advanceState();
         assertEquals(TrafficLightController.State.NS_YELLOW, controller.getState());
+    }
+
+    @Test
+    public void testNsYellowAdvancesToEwGreen() {
+        advanceTimes(2);
+        assertEquals(TrafficLightController.State.EW_GREEN, controller.getState());
+    }
+
+    private void advanceTimes(int n) {
+        for (int i = 0; i < n; i++) {
+            controller.advanceState();
+        }
     }
 }

@@ -17,4 +17,14 @@ public class TrafficLightController {
     public void setState(State current_state) {
         this.current_state = current_state;
     }
+
+    public void advanceState() {
+        switch (current_state){
+            case NS_GREEN:
+                current_state = State.NS_YELLOW;
+                break;
+            default:
+                break;
+        }
+    }
 }
