@@ -1,66 +1,70 @@
 public class TrafficLightController {
-    public enum State {
-        NS_GREEN,
-        NS_YELLOW,
-        EW_GREEN,
-        EW_YELLOW
+
+    public enum LightState {
+        GREEN,
+        YELLOW,
+        RED
     }
-    public enum Arrow_State {
+
+    public enum ArrowState {
         NS_ON,
         EW_ON,
         BOTH_OFF
     }
 
-    private State current_state;
-    private Arrow_State current_arrow_state;
+    private LightState nsState;
+    private LightState ewState;
+    private ArrowState arrowState;
 
     public TrafficLightController() {
-        this.current_state = TrafficLightController.State.NS_GREEN;
-        this.current_arrow_state = Arrow_State.EW_ON;
+        this.nsState    = LightState.GREEN;
+        this.ewState    = LightState.RED;
+        this.arrowState = ArrowState.EW_ON;
     }
 
-    public State getState() {
-        return current_state;
+    public LightState getNsState() {
+        return nsState;
     }
-    public void setState(State current_state) {
-        this.current_state = current_state;
+
+    public LightState getEwState() {
+        return ewState;
+    }
+
+    public ArrowState getArrowState() {
+        return arrowState;
     }
 
     public void advanceState() {
-        switch (current_state){
-            case NS_GREEN:
-                current_state = State.NS_YELLOW;
-                current_arrow_state = Arrow_State.BOTH_OFF;
-                break;
-            case NS_YELLOW:
-                current_state = State.EW_GREEN;
-                current_arrow_state = Arrow_State.NS_ON;
-                break;
-            case EW_GREEN:
-                current_state = State.EW_YELLOW;
-                current_arrow_state = Arrow_State.BOTH_OFF;
-                break;
-            case EW_YELLOW:
-                current_state = State.NS_GREEN;
-                current_arrow_state = Arrow_State.EW_ON;
-                break;
+        if (nsState == LightState.GREEN) {
+            nsState    = LightState.YELLOW;
+            arrowState = ArrowState.BOTH_OFF;
+
+        } else if (nsState == LightState.YELLOW) {
+            nsState    = LightState.RED;
+            ewState    = LightState.GREEN;
+            arrowState = ArrowState.NS_ON;
+
+        } else if (nsState == LightState.RED && ewState == LightState.GREEN) {
+            ewState    = LightState.YELLOW;
+            arrowState = ArrowState.BOTH_OFF;
+
+        } else if (nsState == LightState.RED
+                && ewState == LightState.YELLOW) {
+            nsState    = LightState.GREEN;
+            ewState    = LightState.RED;
+            arrowState = ArrowState.EW_ON;
         }
     }
 
     public boolean isNorthSouthGreen() {
-        return current_state == State.NS_GREEN;
+        return nsState == LightState.GREEN;
     }
 
     public boolean isEastWestGreen() {
-        return current_state == State.EW_GREEN;
+        return ewState == LightState.GREEN;
     }
 
     public boolean areBothAxesGreenSimultaneously() {
         return isNorthSouthGreen() && isEastWestGreen();
-    }
-
-
-    public Arrow_State getArrowState() {
-        return this.current_arrow_state;
     }
 }

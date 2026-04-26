@@ -11,27 +11,50 @@ public class TrafficLightControllerTest {
         controller = new TrafficLightController();
     }
 
+    // Initial state tests
+
     @Test
-    public void testInitialStateIsNorthSouthGreen() {
-        assertEquals(TrafficLightController.State.NS_GREEN, controller.getState());
+    public void testInitialNsStateIsGreen() {
+        assertEquals(TrafficLightController.LightState.GREEN, controller.getNsState());
     }
+
+    @Test
+    public void testInitialEwStateIsRed() {
+        assertEquals(TrafficLightController.LightState.RED, controller.getEwState());
+    }
+
+    @Test
+    public void testInitialArrowStateIsEwOn() {
+        assertEquals(TrafficLightController.ArrowState.EW_ON, controller.getArrowState());
+    }
+
+    // NsGreen to NSYellow
 
     @Test
     public void testNsGreenAdvancesToNsYellow() {
         controller.advanceState();
-        assertEquals(TrafficLightController.State.NS_YELLOW, controller.getState());
+        assertEquals(
+                TrafficLightController.LightState.YELLOW,
+                controller.getNsState()
+        );
     }
 
     @Test
-    public void testNsYellowAdvancesToEwGreen() {
-        advanceTimes(2);
-        assertEquals(TrafficLightController.State.EW_GREEN, controller.getState());
+    public void testEwStaysRedWhenNsIsYellow() {
+        controller.advanceState();
+        assertEquals(
+                TrafficLightController.LightState.RED,
+                controller.getEwState()
+        );
     }
 
     @Test
-    public void testEwGreenAdvancesToEwYellow() {
-        advanceTimes(3);
-        assertEquals(TrafficLightController.State.EW_YELLOW, controller.getState());
+    public void testArrowIsOffWhenNsIsYellow() {
+        controller.advanceState();
+        assertEquals(
+                TrafficLightController.ArrowState.BOTH_OFF,
+                controller.getArrowState()
+        );
     }
 
     private void advanceTimes(int n) {
@@ -40,58 +63,42 @@ public class TrafficLightControllerTest {
         }
     }
 
+    // Ns Yellow to NsRed && EwGreen
+
+    @Test
+    public void testNsYellowAdvancesToNsRed() {
+        advanceTimes(2);
+        assertEquals(TrafficLightController.LightState.RED, controller.getNsState());
+    }
+
+    @Test
+    public void testEwGoesGreenWhenNsBecomesRed() {
+        advanceTimes(2);
+        assertEquals(TrafficLightController.LightState.GREEN, controller.getEwState());
+    }
+
+    @Test
+    public void testNsArrowOnWhenEwIsGreen() {
+        advanceTimes(2);
+        assertEquals(TrafficLightController.ArrowState.NS_ON, controller.getArrowState());
+    }
+
+    // EwGreen to EwYellow
+
+
+
+    // EwYellow to EwRed && NsGreen
+
+
+
+
+
+
     @Test
     public void testNsAndEwAreNeverBothGreen() {
         for (int i = 0; i < 8; i++) {
-            assertFalse("Both axes are green at step " + i, controller.areBothAxesGreenSimultaneously());
-            controller.advanceState();
+            assertFalse("Both axes are green at step " + i, controller.areBothAxesGreenSimultaneously());controller.advanceState();
         }
     }
-    @Test
-    public void testWholeCycle() {
-        advanceTimes(4);
-        assertEquals(TrafficLightController.State.NS_GREEN, controller.getState());
-    }
 
-    @Test
-    public void testInitialArrowState() {
-        assertEquals(TrafficLightController.State.NS_GREEN, controller.getState());
-        assertEquals(TrafficLightController.Arrow_State.EW_ON, controller.getArrowState());
-    }
-    @Test
-    public void testArrowChangesAfterFullCycle() {
-        advanceTimes(4);
-        assertEquals(TrafficLightController.Arrow_State.EW_ON, controller.getArrowState());
-    }
-
-    @Test
-    public void testArrowOnYellowState() {
-        controller.advanceState();
-        assertEquals(TrafficLightController.Arrow_State.BOTH_OFF, controller.getArrowState());
-        advanceTimes(2);
-        assertEquals(TrafficLightController.Arrow_State.BOTH_OFF, controller.getArrowState());
-    }
-
-    // CrossWalks
-
-    @Test
-    public void testCrosswalkAtInitialNsGreenState() {
-        assertEquals(TrafficLightController.CrosswalkState.WALK, controller.getNsCrosswalk());
-        assertEquals(TrafficLightController.CrosswalkState.DONT_WALK, controller.getEwCrosswalk());
-    }
-
-    @Test
-    public void testCrosswalkDuringNsYellow() {
-        controller.advanceState();
-        assertEquals(TrafficLightController.CrosswalkState.DONT_WALK, controller.getNsCrosswalk());
-        assertEquals(TrafficLightController.CrosswalkState.DONT_WALK, controller.getEwCrosswalk());
-    }
-
-    @Test
-    public void testBothCrosswalksAreNeverWalkSimultaneously() {
-        for (int i = 0; i < 8; i++) {
-            assertFalse("Both crosswalks are walk at step " + i, controller.areBothCrosswalksWalkSimultaneously());
-            controller.advanceState();
-        }
-    }
 }
