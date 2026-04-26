@@ -39,4 +39,12 @@ public class TrafficLightControllerTest {
             controller.advanceState();
         }
     }
+
+    @Test
+    public void testNsAndEwAreNeverBothGreen() {
+        for (int i = 0; i < 8; i++) {
+            assertFalse("Both axes are green at step " + i, controller.areBothAxesGreenSimultaneously());
+            controller.advanceState();
+        }
+    }
 }

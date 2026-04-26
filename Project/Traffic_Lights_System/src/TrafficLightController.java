@@ -26,8 +26,24 @@ public class TrafficLightController {
             case NS_YELLOW:
                 current_state = State.EW_GREEN;
                 break;
-            default:
+            case EW_GREEN:
+                current_state = State.EW_YELLOW;
+                break;
+            case EW_YELLOW:
+                current_state = State.NS_GREEN;
                 break;
         }
+    }
+
+    public boolean isNorthSouthGreen() {
+        return current_state == State.NS_GREEN;
+    }
+
+    public boolean isEastWestGreen() {
+        return current_state == State.EW_GREEN;
+    }
+
+    public boolean areBothAxesGreenSimultaneously() {
+        return isNorthSouthGreen() && isEastWestGreen();
     }
 }
