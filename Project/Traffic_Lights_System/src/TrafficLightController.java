@@ -5,6 +5,7 @@ public class TrafficLightController {
         EW_GREEN,
         EW_YELLOW
     }
+
     private State current_state;
 
     public TrafficLightController() {

@@ -47,4 +47,15 @@ public class TrafficLightControllerTest {
             controller.advanceState();
         }
     }
+    @Test
+    public void testWholeCycle() {
+        advanceTimes(4);
+        assertEquals(TrafficLightController.State.NS_GREEN, controller.getState());
+    }
+
+    @Test
+    public void testInitialArrowState() {
+        assertEquals(TrafficLightController.State.NS_GREEN, controller.getState());
+        assertEquals(TrafficLightController.Arrow_State.EW_ON, controller.getArrowState());
+    }
 }
