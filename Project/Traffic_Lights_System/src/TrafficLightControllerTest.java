@@ -28,6 +28,12 @@ public class TrafficLightControllerTest {
         assertEquals(TrafficLightController.State.EW_GREEN, controller.getState());
     }
 
+    @Test
+    public void testEwGreenAdvancesToEwYellow() {
+        advanceTimes(3);
+        assertEquals(TrafficLightController.State.EW_YELLOW, controller.getState());
+    }
+
     private void advanceTimes(int n) {
         for (int i = 0; i < n; i++) {
             controller.advanceState();

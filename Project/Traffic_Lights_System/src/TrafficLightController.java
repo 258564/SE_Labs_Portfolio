@@ -23,6 +23,9 @@ public class TrafficLightController {
             case NS_GREEN:
                 current_state = State.NS_YELLOW;
                 break;
+            case NS_YELLOW:
+                current_state = State.EW_GREEN;
+                break;
             default:
                 break;
         }
