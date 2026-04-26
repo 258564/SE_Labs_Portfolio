@@ -63,4 +63,13 @@ public class TrafficLightControllerTest {
         advanceTimes(4);
         assertEquals(TrafficLightController.Arrow_State.EW_ON, controller.getArrowState());
     }
+
+    @Test
+    public void testArrowOnYellowState() {
+        controller.advanceState();
+        assertEquals(TrafficLightController.Arrow_State.BOTH_OFF, controller.getArrowState());
+        advanceTimes(2);
+        assertEquals(TrafficLightController.Arrow_State.BOTH_OFF, controller.getArrowState());
+    }
+
 }

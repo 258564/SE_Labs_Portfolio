@@ -12,9 +12,11 @@ public class TrafficLightController {
     }
 
     private State current_state;
+    private Arrow_State current_arrow_state;
 
     public TrafficLightController() {
         this.current_state = TrafficLightController.State.NS_GREEN;
+        this.current_arrow_state = Arrow_State.EW_ON;
     }
 
     public State getState() {
@@ -28,15 +30,19 @@ public class TrafficLightController {
         switch (current_state){
             case NS_GREEN:
                 current_state = State.NS_YELLOW;
+                current_arrow_state = Arrow_State.BOTH_OFF;
                 break;
             case NS_YELLOW:
                 current_state = State.EW_GREEN;
+                current_arrow_state = Arrow_State.NS_ON;
                 break;
             case EW_GREEN:
                 current_state = State.EW_YELLOW;
+                current_arrow_state = Arrow_State.BOTH_OFF;
                 break;
             case EW_YELLOW:
                 current_state = State.NS_GREEN;
+                current_arrow_state = Arrow_State.EW_ON;
                 break;
         }
     }
@@ -55,13 +61,6 @@ public class TrafficLightController {
 
 
     public Arrow_State getArrowState() {
-        switch (current_state) {
-            case NS_GREEN:
-                return Arrow_State.EW_ON;
-            case EW_GREEN:
-                return Arrow_State.NS_ON;
-            default:
-                return Arrow_State.BOTH_OFF;
-        }
+        return this.current_arrow_state;
     }
 }
