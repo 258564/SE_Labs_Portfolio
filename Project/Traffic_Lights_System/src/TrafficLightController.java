@@ -12,12 +12,20 @@ public class TrafficLightController {
         BOTH_OFF
     }
 
+    private enum CyclePhase {
+        NS_GREEN,
+        NS_YELLOW_TO_EW,
+        EW_YELLOW_OPEN,
+        EW_GREEN,
+        EW_YELLOW_CLOSE,
+        NS_YELLOW_TO_NS
+    }
+
     private LightState nsState;
     private LightState ewState;
     private ArrowState arrowState;
 
-    private boolean prev_ns_green = true;
-    private boolean prev_ew_on = false;
+    private CyclePhase phase = CyclePhase.NS_GREEN;
 
     public TrafficLightController() {
         this.nsState = LightState.GREEN;
@@ -38,40 +46,39 @@ public class TrafficLightController {
     }
 
     public void advanceState() {
-        if (nsState == LightState.GREEN && ewState == LightState.RED) {
-            nsState = LightState.YELLOW;
-            arrowState = ArrowState.BOTH_OFF;
-        } else if (nsState == LightState.YELLOW && ewState == LightState.RED && prev_ns_green == true) {
-            nsState = LightState.RED;
-            ewState = LightState.YELLOW;
-            prev_ns_green = false;
-        } else if (nsState == LightState.RED && ewState == LightState.YELLOW && prev_ew_on == false) {
-            ewState = LightState.GREEN;
-            arrowState = ArrowState.NS_ON;
-            prev_ew_on = true;
-        } else if (nsState == LightState.RED && ewState == LightState.GREEN) {
-            ewState = LightState.YELLOW;
-            arrowState = ArrowState.BOTH_OFF;
-        } else if (nsState == LightState.RED && ewState == LightState.YELLOW && prev_ew_on == true) {
-            ewState = LightState.RED;
-            nsState = LightState.YELLOW;
-            prev_ew_on = false;
-        } else if (nsState == LightState.YELLOW && ewState == LightState.RED && prev_ns_green == false) {
-            nsState = LightState.GREEN;
-            arrowState = ArrowState.EW_ON;
-            prev_ns_green = true;
+        switch (phase) {
+            case NS_GREEN:
+                nsState = LightState.YELLOW;
+                arrowState = ArrowState.BOTH_OFF;
+                phase = CyclePhase.NS_YELLOW_TO_EW;
+                break;
+            case NS_YELLOW_TO_EW:
+                nsState = LightState.RED;
+                ewState = LightState.YELLOW;
+                phase = CyclePhase.EW_YELLOW_OPEN;
+                break;
+            case EW_YELLOW_OPEN:
+                ewState = LightState.GREEN;
+                arrowState = ArrowState.NS_ON;
+                phase = CyclePhase.EW_GREEN;
+                break;
+            case EW_GREEN:
+                ewState = LightState.YELLOW;
+                arrowState = ArrowState.BOTH_OFF;
+                phase = CyclePhase.EW_YELLOW_CLOSE;
+                break;
+            case EW_YELLOW_CLOSE:
+                ewState = LightState.RED;
+                nsState = LightState.YELLOW;
+                phase = CyclePhase.NS_YELLOW_TO_NS;
+                break;
+            case NS_YELLOW_TO_NS:
+                nsState = LightState.GREEN;
+                arrowState = ArrowState.EW_ON;
+                phase = CyclePhase.NS_GREEN;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected cycle phase: " + phase);
         }
-    }
-
-    public boolean isNorthSouthGreen() {
-        return nsState == LightState.GREEN;
-    }
-
-    public boolean isEastWestGreen() {
-        return ewState == LightState.GREEN;
-    }
-
-    public boolean areBothAxesGreenSimultaneously() {
-        return isNorthSouthGreen() && isEastWestGreen();
     }
 }
