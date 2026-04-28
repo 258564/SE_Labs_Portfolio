@@ -1,3 +1,0 @@
-## Lab6_TDD
-
-Lab6_TDD is a bowling game program developed by Hlib Bokatov and Igor Bogolewbski using the Test-Driven Development. The project implements a bowling game scoring system built entirely through a ping-pong pair programming approach, where one partner writes a failing test for a new piece of functionality and the other writes the minimal code required to make that test pass, repeating the cycle recursively until the program is complete
